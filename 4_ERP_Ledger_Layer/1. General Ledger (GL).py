@@ -28,11 +28,10 @@ df_rev = pd.DataFrame(revenue_records, columns=['Month', 'Segment', 'Active_Cust
 # 2. Generate General Ledger Ledger (Expenses & Balance Sheet Items)
 gl_records = []
 for m in months:
-    # OpEx Rollforward (Seasonality & Growth)
     idx = (m.year - 2024) * 12 + m.month
     base_salaries = 180000 * (1 + 0.015 ** idx)
-    marketing_spend = 45000 * np.random.uniform(0.9, 1.1) + (15000 if m.month in [9, 11] else 0) # Q3/Q4 marketing push
-    hosting_cogs = (df_rev[df_rev['Month'] == m]['MRR'].sum() * 0.12) # 12% hosting COGS
+    marketing_spend = 45000 * np.random.uniform(0.9, 1.1) + (15000 if m.month in [9, 11] else 0)
+    hosting_cogs = (df_rev[df_rev['Month'] == m]['MRR'].sum() * 0.12)
     
     gl_records.extend([
         [m, 'COGS', 'Hosting & Infrastructure', round(hosting_cogs, 2)],
@@ -43,9 +42,30 @@ for m in months:
 
 df_gl = pd.DataFrame(gl_records, columns=['Month', 'Category', 'Account', 'Amount'])
 
-# Export to Excel to serve as our data source inputs
-with pd.ExcelWriter('FP&A_Model_Data_Source.xlsx', engine='openpyxl') as writer:
+# --- NEW ERP/NETSUITE AUTOMATION EXTENSION ---
+print("\n============================================================")
+print("💼 NETSUITE CORE LEDGER ENGINE v1.0 — RUNNING JOURNAL AUDIT")
+print("============================================================")
+
+# Synthesize total revenue to inject back into the GL accounting stream
+monthly_revenue = df_rev.groupby('Month')['MRR'].sum().reset_index()
+for _, row in monthly_revenue.iterrows():
+    gl_records.append([row['Month'], 'Revenue', 'Subscription Revenue', round(row['MRR'], 2)])
+
+df_full_gl = pd.DataFrame(gl_records, columns=['Month', 'Category', 'Account', 'Amount'])
+
+# Aggregate an automated trial balance check for the entire period
+summary_pnl = df_full_gl.groupby('Category')['Amount'].sum()
+print("\n📊 SYSTEM-GENERATED RETROSPECTIVE TRIAL BALANCE SUMMARY:")
+for cat, total in summary_pnl.items():
+    print(f"  • Total {cat:<10}: €{total:,.2f}")
+
+print("------------------------------------------------------------")
+
+# Export back to the shared project destination
+# NOTE: We navigate up one directory because this script now runs from inside /4_ERP_Ledger_Layer/
+with pd.ExcelWriter('../2_Data_Engine_Layer/FP&A_Model_Data_Source.xlsx', engine='openpyxl') as writer:
     df_rev.to_excel(writer, sheet_name='Historical_SaaS_Metrics', index=False)
     df_gl.to_excel(writer, sheet_name='Historical_GL_Dump', index=False)
 
-print("🚀 Module 1 Complete: High-fidelity historical datasets exported to FP&A_Model_Data_Source.xlsx.")
+print("🚀 Module 1 Complete: High-fidelity historical datasets exported to Data Engine Layer.")
