@@ -36,3 +36,34 @@ This suite functions as a unified corporate financial data pipeline, moving from
 Ensure your environment contains the required dependencies:
 ```bash
 pip install pandas numpy matplotlib openpyxl
+
+Run the Suite Pipeline Step-by-Step:
+Generate SaaS Dashboards Metrics:
+
+Bash
+python3 3_SaaS_Dashboard_Engine.py
+Execute Budget vs. Actual (BVA) Variance Analysis:
+
+Bash
+python3 4_BVA_Variance_Analysis.py
+Export Executive Visual Board Pack:
+
+Bash
+python3 5_Executive_Board_Pack.py
+Boot Up the Interactive AI Copilot Console:
+
+Bash
+python3 6_AI_Finance_Copilot.py
+Developed by Elena Hs — Integrating Quantitative Data Engineering with Strategic Corporate Finance.
+
+
+---
+
+### Step 2: Push the Documentation Live
+
+Save that file, switch over to your terminal, and push this update to your repository:
+
+```bash
+git add README.md
+git commit -m "Docs: Add institutional master README overview"
+git push origin main
