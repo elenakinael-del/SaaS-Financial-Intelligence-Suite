@@ -1,4 +1,4 @@
-SaaS Financial Intelligence Suite 📊
+SaaS Financial Intelligence Suite 
 
 An institutional-grade corporate financial data engineering pipeline and ledger automation ecosystem. This suite models end-to-end financial operations for a subscription-based enterprise, moving raw operational metrics into structured accounting journals and relational databases for strategic analysis.
 
