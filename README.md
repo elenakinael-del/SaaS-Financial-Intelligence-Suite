@@ -1,6 +1,17 @@
-SaaS Financial Intelligence Suite 
+# SaaS Financial Intelligence: Executive KPI Case Study
 
-An institutional-grade corporate financial data engineering pipeline and ledger automation ecosystem. This suite models end-to-end financial operations for a subscription-based enterprise, moving raw operational metrics into structured accounting journals and relational databases for strategic analysis.
+An end-to-end, **synthetic** SaaS finance case study: operational metrics and general-ledger rows are transformed into an executive KPI mart and queried with SQLite. It demonstrates data modelling, SQL, metric definitions, and decision-ready reporting; it is not a production ERP.
+
+## What a hiring manager can review
+
+- A reproducible KPI data mart: run `2_Data_Engine_Layer/3_SaaS_Dashboard_Engine.py`.
+- A relational SQLite build: run `5_SQL_Database_Layer/5_Financial_DB_App.py` from that folder.
+- A documented CTE case study in [`5_SQL_Database_Layer/portfolio_case_study.sql`](5_SQL_Database_Layer/portfolio_case_study.sql).
+- A data-quality test in `tests/test_dashboard_metrics.py`.
+
+### Metric definitions and assumptions
+
+MRR is the monthly sum in `Historical_SaaS_Metrics`; ARR is `MRR × 12`; active logos are summed from the supplied synthetic source. CAC is reported only where new logos are positive—no artificial floor is applied. The Rule of 40 uses an explicitly labelled 22% EBITDA-margin **assumption**, because the source does not contain observed EBITDA.
 
  System Architecture & Layers
 
@@ -18,7 +29,7 @@ SaaS-Financial-Intelligence-Suite/
 
 To run the tools in this suite, you must have Python installed along with the required financial and data engineering libraries. Install them all with a single terminal command:
 
-pip install pandas numpy matplotlib openpyxl
+pip install pandas numpy matplotlib openpyxl pytest
 
 
  Module Deep Dives
@@ -41,6 +52,9 @@ To execute the database compilation pipeline and output the executive-level mont
 
 cd 5_SQL_Database_Layer
 python3 5_Financial_DB_App.py
+
+# from the repository root
+pytest -q
 
 
  Tech Stack
